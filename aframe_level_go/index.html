@@ -13,17 +13,19 @@
 
     <a-assets>
       <a-asset-item id="Torus" src="model/Torus.gltf"></a-asset-item>
-      <a-asset-item id="Player" src="model/Player.gltf"></a-asset-item>
+      <a-asset-item id="Player" src="model/Player2.gltf"></a-asset-item>
+      <img id="sky" src="images/desert_equirect.jpg">
     </a-assets>
 
     <a-entity oculus-go-controls raycaster="objects: .collidable; showLine: true; far: 100;" line="color: orange; opacity: 0.5"></a-entity>
 
-    <a-box position="0 1.5 -3" scale="0.5 0.5 0.5" color="red" shadow></a-box>
+    <!-- <a-box position="0 1.5 -3" scale="0.5 0.5 0.5" color="red" shadow></a-box>
+        
+        <a-gltf-model src="#Torus" class="collidable" scale="0.7 0.7 0.7" position="3 1.5 -3"></a-gltf-model> -->
 
-    <a-gltf-model src="#Torus" class="collidable" scale="0.7 0.7 0.7" position="3 1.5 -3"></a-gltf-model>
+    <a-gltf-model src="#Player" class="collidable" position="0 1.6 -3" scale="1 1 1" rotation="0 180 0"></a-gltf-model>
 
-    <a-gltf-model src="#Player" class="collidable" position="-3 1.5 -3" scale="0.06 0.06 0.06" rotation="0 180 0"></a-gltf-model>
-
+    <a-sky src="#sky"></a-sky>
 
     <!-- <a-box position="-1 -1 0" color="#4CC3D9" shadow></a-box>
     <a-box position="-1 1 0" color="#4CC3D9" shadow></a-box>
