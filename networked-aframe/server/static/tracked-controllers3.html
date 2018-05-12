@@ -17,6 +17,75 @@
   <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
   <script src="https://unpkg.com/aframe-particle-system-component@1.0.5/dist/aframe-particle-system-component.min.js"></script>
   <script src="/js/spawn-in-circle.component.js"></script>
+  <script>
+    var enemy = null;
+
+    AFRAME.registerComponent("player-aim", {
+      schema: {
+        color: {
+          default: 'red'
+        }
+      },
+      init: function () {
+        var data = this.data;
+        var el = this.el;
+        var defaultColor = 'red';
+
+        el.addEventListener("mouseenter", function () {
+          enemy = el;
+          //el.setAttribute('color', data.color);
+        });
+        el.addEventListener("mouseleave", function () {
+          enemy = null;
+          //el.setAttribute('color', defaultColor);
+        });
+      }
+    });
+    AFRAME.registerComponent("controller-fire", {
+      init: function () {
+        var data = this.data;
+        var el = this.el;
+        var defaultColor = 'red';
+
+        el.addEventListener("touchstart", function () {
+          if (enemy != null) {
+            //enemy.setAttribute('color', data.color);
+            enemy.setAttribute('alive', {
+              alive: false
+            });
+          }
+        });
+        /*
+        				el.addEventListener("touchend", function() {
+        					el.setAttribute('color', defaultColor);
+        				});
+        */
+      }
+    });
+    AFRAME.registerComponent("alive", {
+      schema: {
+        alive: {
+          type: 'boolean',
+          default: true
+        }
+      },
+
+      update: function () {
+        var data = this.data; // Component property values.
+        var el = this.el; // Reference to the component's entity.
+        if (!data.alive) {
+          el.setAttribute('color', "red");
+        }
+      },
+
+      init: function () {
+        var data = this.data;
+        var el = this.el;
+        data.alive = true;
+      }
+    });
+  </script>
+
 </head>
 
 <body>
@@ -26,6 +95,10 @@
       debug: true;
     ">
     <a-assets>
+
+      <img id="sky" src="img/desert_equirect.jpg">
+
+      <a-asset-item id="cowboy" src="assets/Player3.gltf"></a-asset-item>
 
       <img id="grid" src="https://img.gs/bbdkhfbzkk/stretch/https://i.imgur.com/25P1geh.png" crossorigin="anonymous">
       <img id="sky" src="http://i.imgur.com/WqlqEkq.jpg" crossorigin="anonymous" />
@@ -41,17 +114,26 @@
       <template id="head-template">
         <a-entity class="avatar">
 
-          <a-sphere class="head" color="#ffffff" scale="0.45 0.5 0.4"></a-sphere>
+          <a-entity class="head" player-aim="color: blue;" alive="alive:true">
+            <a-entity gltf-model="#cowboy"></a-entity>
+          </a-entity>
 
-          <a-entity class="face" position="0 0.05 0">
+          <!-- <a-sphere class="head" color="#ffffff" scale="0.45 0.5 0.4" player-aim="color: blue;" alive="alive:true"></a-sphere> -->
+
+          <!-- <a-entity class="face" position="0 0.05 0">
             <a-sphere class="eye" color="#efefef" position="0.16 0.1 -0.35" scale="0.12 0.12 0.12">
               <a-sphere class="pupil" color="#000" position="0 0 -1" scale="0.2 0.2 0.2"></a-sphere>
             </a-sphere>
             <a-sphere class="eye" color="#efefef" position="-0.16 0.1 -0.35" scale="0.12 0.12 0.12">
               <a-sphere class="pupil" color="#000" position="0 0 -1" scale="0.2 0.2 0.2"></a-sphere>
             </a-sphere>
-          </a-entity>
+          </a-entity> -->
+        </a-entity>
+      </template>
 
+      <!-- GoController -->
+      <template id="go-template">
+        <a-entity oculus-go-controls raycaster="far: 3" controller-fire>
         </a-entity>
       </template>
 
@@ -69,22 +151,25 @@
 
       <a-entity camera="userHeight: 1.6" look-controls networked="template:#head-template;attachTemplateToLocal:false;">
 
-        <a-sphere class="head" random-color visible="false"></a-sphere>
+        <!-- <a-sphere class="head" random-color visible="false"></a-sphere> -->
+        <a-entity class="head" gltf-model="#cowboy"></a-entity>
 
       </a-entity>
 
-      <a-entity oculus-go-controls></a-entity>
+      <a-entity id="gocontroller" networked="template:#go-template;">
+      </a-entity>
       <a-entity laser-controls="hand: left"></a-entity>
-      <a-entity hand-controls controller-cursor raycaster="far: 2" networked="template:#hand-template;"></a-entity>
+
     </a-entity>
 
     <a-entity position="0 0 0" geometry="primitive: plane; width: 10000; height: 10000;" rotation="-90 0 0" material="src: #grid; repeat: 10000 10000; transparent: true; metalness:0.6; roughness: 0.4; sphericalEnvMap: #sky;"></a-entity>
 
     <a-entity light="color: #ccccff; intensity: 1; type: ambient;" visible=""></a-entity>
     <a-entity light="color: #ffaaff; intensity: 1.5" position="5 5 5"></a-entity>
+    <!-- <a-sky src="#sky" rotation="0 -90 0"></a-sky> -->
+    <!-- <a-entity id="particles" particle-system="preset: snow"></a-entity> -->
 
-    <a-sky src="#sky" rotation="0 -90 0"></a-sky>
-    <a-entity id="particles" particle-system="preset: snow"></a-entity>
+    <a-sky src="#sky"></a-sky>
   </a-scene>
 
   <!-- GitHub Corner. -->
@@ -146,7 +231,7 @@
         'rotation',
         {
           selector: '.head',
-          component: 'material'
+          components: ['material', 'alive']
         }
       ]
     });
