@@ -11,6 +11,14 @@
   <script src="script/components.js"></script>
   <a-scene do-something>
 
+    <a-assets>
+      <a-asset-item id="player-obj" src="model/TestBox.obj"></a-asset-item>
+      <a-asset-item id="player-mtl" src="model/TestBox.mtl"></a-asset-item>
+    </a-assets>
+
+    <a-box position="0 1.5 -3" scale="0.5 0.5 0.5" color="red" shadow></a-box>
+
+    <a-entity obj-model="obj: #player-obj; mtl: #player-mtl" position="0 1.5 -2" scale="0.1 0.1 0.1"></a-entity>
 
     <!-- <a-box position="-1 -1 0" color="#4CC3D9" shadow></a-box>
     <a-box position="-1 1 0" color="#4CC3D9" shadow></a-box>
