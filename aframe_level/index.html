@@ -12,13 +12,16 @@
   <a-scene do-something>
 
     <a-assets>
-      <a-asset-item id="player-obj" src="model/TestBox.obj"></a-asset-item>
-      <a-asset-item id="player-mtl" src="model/TestBox.mtl"></a-asset-item>
+      <a-asset-item id="Torus" src="model/Torus.gltf"></a-asset-item>
+      <a-asset-item id="Player" src="model/Player.gltf"></a-asset-item>
     </a-assets>
 
-    <a-box position="0 1.5 -3" scale="0.5 0.5 0.5" color="red" shadow></a-box>
+    <a-box position="0 1.5 -5" scale="0.5 0.5 0.5" color="red" shadow></a-box>
 
-    <a-entity obj-model="obj: #player-obj; mtl: #player-mtl" position="0 1.5 -2" scale="0.1 0.1 0.1"></a-entity>
+    <a-gltf-model src="#Torus" position="0 1.5 -4"></a-gltf-model>
+
+    <a-gltf-model src="#Player" position="0 1.5 -2" scale="0.07 0.07 0.07" rotation="0 180 0"></a-gltf-model>
+
 
     <!-- <a-box position="-1 -1 0" color="#4CC3D9" shadow></a-box>
     <a-box position="-1 1 0" color="#4CC3D9" shadow></a-box>
